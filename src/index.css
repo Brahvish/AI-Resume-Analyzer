@@ -1,0 +1,249 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* Warm parchment dark — feels like a lit studio at night, not a spaceship */
+    --background: 28 18% 7%;
+    --foreground: 36 30% 93%;
+
+    --card: 28 16% 10%;
+    --card-foreground: 36 30% 93%;
+
+    --popover: 28 16% 9%;
+    --popover-foreground: 36 30% 93%;
+
+    /* Terracotta-amber primary — handcrafted, warm */
+    --primary: 25 85% 48%;
+    --primary-foreground: 36 30% 96%;
+
+    --secondary: 28 12% 18%;
+    --secondary-foreground: 36 25% 80%;
+
+    --muted: 28 12% 14%;
+    --muted-foreground: 36 15% 58%;
+
+    --accent: 42 90% 52%;
+    --accent-foreground: 28 18% 8%;
+
+    --destructive: 350 80% 58%;
+    --destructive-foreground: 36 30% 96%;
+
+    --border: 28 14% 18%;
+    --input: 28 14% 18%;
+    --ring: 25 85% 48%;
+
+    /* Slightly less round — feels more hand-drawn */
+    --radius: 0.75rem;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  html {
+    color-scheme: dark;
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-background text-foreground font-sans antialiased;
+    /* Slight warm grain over everything */
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+  }
+
+  h1, h2, h3, h4 {
+    @apply font-display;
+  }
+
+  ::selection {
+    background-color: rgba(245, 158, 11, 0.3);
+    color: #fef3c7;
+  }
+}
+
+@layer components {
+
+  /* ─── Paper card — warm, slightly textured, not glassy ─── */
+  .paper-card {
+    @apply relative rounded-xl border bg-card shadow-sm;
+    border-color: hsl(28 20% 20%);
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.025'/%3E%3C/svg%3E");
+  }
+
+  .paper-card-hover {
+    @apply transition-all duration-200 ease-out hover:border-warm-sand/30 hover:shadow-[0_4px_24px_-8px_rgba(196,92,58,0.2)];
+  }
+
+  /* ─── Doodle border — imperfect, like pen on paper ─── */
+  .doodle-border {
+    position: relative;
+  }
+  .doodle-border::before {
+    content: "";
+    position: absolute;
+    inset: -1px;
+    border-radius: inherit;
+    background: linear-gradient(
+      135deg,
+      rgba(245, 158, 11, 0.45) 0%,
+      rgba(196, 92, 58, 0.15) 40%,
+      rgba(168, 85, 247, 0.35) 100%
+    );
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    pointer-events: none;
+    padding: 1px;
+  }
+
+  /* ─── Hand-drawn underline using SVG ─── */
+  .hand-underline {
+    position: relative;
+    display: inline-block;
+  }
+  .hand-underline::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: -6px;
+    width: 100%;
+    height: 8px;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 10' preserveAspectRatio='none'%3E%3Cpath d='M2 7 Q40 3 80 6 Q120 9 160 5 Q180 3 198 6' stroke='%23F59E0B' stroke-width='2.5' fill='none' stroke-linecap='round' opacity='0.9'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+  }
+
+  /* ─── Ambient warm background ─── */
+  .warm-backdrop {
+    @apply pointer-events-none fixed inset-0 -z-20;
+    background: 
+      radial-gradient(ellipse 65% 45% at 20% 5%, rgba(245,158,11,0.12) 0%, transparent 60%),
+      radial-gradient(ellipse 55% 40% at 85% 15%, rgba(196,92,58,0.1) 0%, transparent 60%),
+      radial-gradient(ellipse 60% 55% at 50% 100%, rgba(168,85,247,0.07) 0%, transparent 60%),
+      hsl(28, 18%, 7%);
+  }
+
+  /* ─── Warm floating blobs — slower, organic ─── */
+  .blob-field {
+    @apply pointer-events-none fixed inset-0 -z-10 overflow-hidden;
+  }
+  .blob {
+    @apply absolute rounded-full;
+    filter: blur(72px);
+  }
+  .blob-amber {
+    width: 34rem;
+    height: 34rem;
+    background: radial-gradient(circle, rgba(245,158,11,0.18) 0%, transparent 70%);
+    top: -10rem;
+    left: -8rem;
+    animation: blob-drift 16s ease-in-out infinite, glow-breathe 6s ease-in-out infinite;
+  }
+  .blob-terracotta {
+    width: 28rem;
+    height: 28rem;
+    background: radial-gradient(circle, rgba(196,92,58,0.15) 0%, transparent 70%);
+    top: -5rem;
+    right: -10rem;
+    animation: blob-drift-slow 22s ease-in-out infinite, glow-breathe 7s ease-in-out infinite;
+  }
+  .blob-plum {
+    width: 30rem;
+    height: 30rem;
+    background: radial-gradient(circle, rgba(168,85,247,0.1) 0%, transparent 70%);
+    bottom: -12rem;
+    left: 25%;
+    animation: blob-drift 20s ease-in-out infinite reverse, glow-breathe 8s ease-in-out infinite;
+  }
+
+  /* ─── Thin dot grid — more subtle than line grid ─── */
+  .dot-grid {
+    @apply pointer-events-none fixed inset-0 -z-10;
+    background-image: radial-gradient(circle, rgba(255,255,255,0.06) 1px, transparent 1px);
+    background-size: 32px 32px;
+    mask-image: radial-gradient(ellipse 80% 65% at 50% 0%, black 30%, transparent 100%);
+  }
+
+  /* ─── Grain overlay — warmth and tactility ─── */
+  .grain-overlay {
+    @apply pointer-events-none fixed inset-0 -z-10 opacity-[0.04];
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+
+  /* ─── Gradient text — warm direction ─── */
+  .text-gradient {
+    @apply bg-gradient-to-r from-warm-amber via-warm-orange to-warm-terracotta bg-clip-text text-transparent;
+  }
+
+  .text-gradient-cool {
+    @apply bg-gradient-to-r from-warm-amber to-signal-violet bg-clip-text text-transparent;
+  }
+
+  .text-gradient-animated {
+    background: linear-gradient(135deg, #F59E0B, #EA580C, #C45C3A, #A855F7, #F59E0B);
+    background-size: 300% auto;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: gradient-shift 5s ease infinite;
+  }
+
+  /* ─── Scan sweep ─── */
+  .scan-sweep {
+    @apply pointer-events-none absolute inset-x-0 h-1/3 bg-gradient-to-b from-warm-amber/0 via-warm-amber/20 to-warm-amber/0;
+    animation: scan-line 2.4s ease-in-out infinite;
+  }
+
+  /* ─── Shimmer for button surfaces ─── */
+  .shimmer-surface {
+    position: relative;
+    overflow: hidden;
+  }
+  .shimmer-surface::after {
+    content: "";
+    @apply absolute inset-0 bg-shimmer-gradient bg-[length:200%_100%];
+    animation: shimmer 3s linear infinite;
+  }
+
+  /* ─── Glow ring — warm amber instead of cold violet ─── */
+  .glow-ring {
+    box-shadow: 0 0 0 1px rgba(245,158,11,0.08), 0 0 48px -12px rgba(196,92,58,0.3);
+  }
+
+  /* ─── Handcrafted pill badge ─── */
+  .craft-pill {
+    @apply inline-flex items-center gap-2 rounded-full border border-warm-sand/20 bg-warm-amber/[0.07] px-4 py-1.5 text-xs uppercase tracking-[0.15em] text-warm-sand font-mono;
+  }
+
+  /* ─── Number step badge ─── */
+  .step-number {
+    @apply font-hand text-5xl font-bold text-warm-amber/15;
+  }
+
+  /* ─── Wavy section divider ─── */
+  .section-rule {
+    width: 100%;
+    height: 1px;
+    background: linear-gradient(to right, transparent, rgba(245,158,11,0.25) 30%, rgba(196,92,58,0.2) 70%, transparent);
+    margin: 2rem 0;
+  }
+
+  /* ─── Hand-drawn circle decoration ─── */
+  .circle-deco {
+    @apply pointer-events-none absolute rounded-full border border-dashed;
+    border-color: rgba(245,158,11,0.12);
+  }
+}
+
+@layer utilities {
+  .mono-data {
+    @apply font-mono tracking-tight;
+  }
+  .hand-text {
+    @apply font-hand;
+  }
+}
